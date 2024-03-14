@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'vision_detector_views/home.dart';
+import 'vision_detector_views/route.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

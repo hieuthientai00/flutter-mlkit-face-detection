@@ -1,5 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/web.dart';
+
+var logger = Logger();
 
 class Utils {
   static final CameraLensDirection frontCameraLensDirection =

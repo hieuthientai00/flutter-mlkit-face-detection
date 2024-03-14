@@ -31,12 +31,6 @@ class FullFaceDetectorChecker {
       canvasSize,
       imageSize,
     );
-    print('''
-      $left $top $right $bottom $canvasSize
-      headEulerAngleX: ${face.headEulerAngleX},
-      headEulerAngleY: ${face.headEulerAngleY},
-      headEulerAngleZ: ${face.headEulerAngleZ},
-      ''');
     checkMatchedNotifier.value = CheckFaceDirection(
       headEulerAngleX: face.headEulerAngleX!,
       headEulerAngleY: face.headEulerAngleY!,

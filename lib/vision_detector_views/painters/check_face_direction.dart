@@ -52,7 +52,7 @@ class CheckFaceDirection {
     return (headEulerAngleX > -10 && headEulerAngleX < 10);
   }
 
-  // check đầu thẳng đứng
+  // check đầu thẳng đứng không nghiêng
   bool checkFaceStraight() {
     return (headEulerAngleZ >= -10 && headEulerAngleZ <= 10);
   }

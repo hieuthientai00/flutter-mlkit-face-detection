@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -8,7 +9,7 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
 import '../image_screen.dart';
-import 'full_face_detector_painter.dart';
+import 'full_face_detector_checker.dart';
 
 class CameraFrontFaceViewScreen extends StatefulWidget {
   CameraFrontFaceViewScreen({
@@ -26,9 +27,9 @@ class CameraFrontFaceViewScreen extends StatefulWidget {
 class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
   static List<CameraDescription> _cameras = [];
   CameraController? _controller;
-  FullFaceDetectorPainter? facePainter;
   int _cameraIndex = -1;
   bool checkMatched = false;
+  ValueNotifier<bool> checkMatchedNotifier = ValueNotifier<bool>(false);
   final Paint painter = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2.0
@@ -81,36 +82,33 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
           children: [
             CameraPreview(
               _controller!,
-              child: CustomPaint(painter: facePainter),
             ),
             Positioned(
               left: 50,
               top: 150,
               right: 50,
-              child: Image(
-                color: checkMatched ? Colors.green : Colors.red,
-                image: AssetImage('assets/images/icon-scan2.png'),
+              child: ValueListenableBuilder<bool>(
+                valueListenable: checkMatchedNotifier,
+                builder: (context, matched, child) {
+                  if (matched) {
+                    _controller?.pausePreview().then((_) {
+                      _controller?.takePicture().then((picture) {
+                        context.go(ImageView.route, extra: picture.path);
+                      });
+                    });
+                    return Image(
+                      color: Colors.green,
+                      image: AssetImage('assets/images/icon-scan2.png'),
+                    );
+                  }
+                  return Image(
+                    color: Colors.red,
+                    image: AssetImage('assets/images/icon-scan2.png'),
+                  );
+                },
               ),
             ),
           ],
-        ),
-        Center(
-          child: IconButton(
-            icon: Icon(
-              Icons.camera,
-              size: 40,
-            ),
-            onPressed: () async {
-              if (_controller == null) {
-                return;
-              }
-              if (checkMatched) {
-                _controller?.takePicture().then((pictureXfile) {
-                  context.push(ImageView.route, extra: pictureXfile.path);
-                });
-              }
-            },
-          ),
         ),
       ],
     );
@@ -122,19 +120,12 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
         final face = faces[0];
         if (inputImage.metadata?.size != null &&
             inputImage.metadata?.rotation != null) {
-          facePainter = FullFaceDetectorPainter(
-            painter: painter,
+          FullFaceDetectorChecker.check(
             face: face,
+            canvasSize: Utils.frontFaceCanvasSize,
             imageSize: inputImage.metadata!.size,
-            checkMatched: (matched) {
-              checkMatched = matched;
-            },
+            checkMatchedNotifier: checkMatchedNotifier,
           );
-        } else {
-          facePainter = null;
-        }
-        if (mounted) {
-          setState(() {});
         }
       }
     });
@@ -142,20 +133,22 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
 
   Future _startLiveFeed() async {
     final camera = _cameras[_cameraIndex];
-    _controller = CameraController(camera, ResolutionPreset.high,
-        enableAudio: false, imageFormatGroup: ImageFormatGroup.nv21);
+    _controller = CameraController(
+      camera,
+      ResolutionPreset.medium,
+      enableAudio: false,
+      imageFormatGroup: ImageFormatGroup.nv21,
+    );
     _controller?.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      _controller?.startImageStream(_processCameraImage);
+      _controller?.startImageStream((image) {
+        final inputImage = _inputImageFromCameraImage(image);
+        if (inputImage == null) return;
+        onImage(inputImage);
+      });
+      setState(() {
+        print('Initialized camera controller');
+      });
     });
-  }
-
-  void _processCameraImage(CameraImage image) {
-    final inputImage = _inputImageFromCameraImage(image);
-    if (inputImage == null) return;
-    onImage(inputImage);
   }
 
   final _orientations = {
@@ -167,11 +160,6 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
 
   InputImage? _inputImageFromCameraImage(CameraImage image) {
     if (_controller == null) return null;
-
-    // get image rotation
-    // it is used in android to convert the InputImage from Dart to Java: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/google_mlkit_commons/android/src/main/java/com/google_mlkit_commons/InputImageConverter.java
-    // `rotation` is not used in iOS to convert the InputImage from Dart to Obj-C: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/google_mlkit_commons/ios/Classes/MLKVisionImage%2BFlutterPlugin.m
-    // in both platforms `rotation` and `camera.lensDirection` can be used to compensate `x` and `y` coordinates on a canvas: https://github.com/flutter-ml/google_ml_kit_flutter/blob/master/packages/example/lib/vision_detector_views/painters/coordinates_translator.dart
     final camera = _cameras[_cameraIndex];
     final sensorOrientation = camera.sensorOrientation;
     InputImageRotation? rotation;
@@ -190,7 +178,6 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
 
     // get image format
     final format = InputImageFormatValue.fromRawValue(image.format.raw);
-    // validate format depending on platform
     // only supported formats:
     // * nv21 for Android
     // * bgra8888 for iOS

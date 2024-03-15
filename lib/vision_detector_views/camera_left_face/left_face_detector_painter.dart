@@ -43,20 +43,19 @@ class LeftFaceDetectorPainter extends CustomPainter {
       Rect.fromLTRB(left, top, right, bottom),
       painter,
     );
-    print(
-      '''
+    print('''
       raw ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
       left $left $top $right $bottom $size $imageSize
       headEulerAngleX: ${face.headEulerAngleX},
       headEulerAngleY: ${face.headEulerAngleY},
       headEulerAngleZ: ${face.headEulerAngleZ},
-      '''
-    );
+      ''');
     checkMatched(CheckFaceDirection(
       headEulerAngleX: face.headEulerAngleX!,
       headEulerAngleY: face.headEulerAngleY!,
       headEulerAngleZ: face.headEulerAngleZ!,
-    ).faceLeft(left, top, right, bottom));
+    ).faceLeft(face.boundingBox.left, face.boundingBox.top,
+        face.boundingBox.right, face.boundingBox.bottom));
   }
 
   @override

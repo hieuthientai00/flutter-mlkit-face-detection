@@ -12,17 +12,17 @@ class CheckFaceDirection {
   // check face khớp với khung
   bool checkFaceMatchingFrame(
       double left, double top, double right, double bottom) {
-    return (left >= 310 &&
-        left <= 340 &&
-        top >= 140 &&
-        top <= 170 &&
-        right > 40 &&
-        right <= 60 &&
-        bottom >= 410 &&
-        bottom <= 440);
+    return (left >= 50 &&
+        left <= 90 &&
+        top >= 170 &&
+        top <= 210 &&
+        right > 390 &&
+        right <= 430 &&
+        bottom >= 510 &&
+        bottom <= 550);
   }
-  
-  // check face nhìn sang bên trái - so với cam trước
+
+  // check face chụp mặt bên trái - so với cam trước
   bool checkFaceLeft() {
     return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera sau
     // return (headEulerAngleY <= -20 && headEulerAngleY >= -80); // camera truoc

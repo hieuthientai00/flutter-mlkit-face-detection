@@ -43,7 +43,14 @@ class RightFaceDetectorPainter extends CustomPainter {
       Rect.fromLTRB(left, top, right, bottom),
       painter,
     );
-    print('Canvas size: $size');
+    print(
+      '''
+      right $left $top $right $bottom $size $imageSize
+      headEulerAngleX: ${face.headEulerAngleX},
+      headEulerAngleY: ${face.headEulerAngleY},
+      headEulerAngleZ: ${face.headEulerAngleZ},
+      '''
+    );
     checkMatched(CheckFaceDirection(
       headEulerAngleX: face.headEulerAngleX!,
       headEulerAngleY: face.headEulerAngleY!,
@@ -67,4 +74,11 @@ Face 328.5 154.1333333 57.60000000000002 429.866666 Size(384.0, 682.7) - Size(12
 Face 328.5 156.2666666 57.60000000000002 432.000000 Size(384.0, 682.7) - Size(1280.0, 720.0)
 
 Canvas size: Size(384.0, 682.7)
+*/
+
+/*
+I/flutter ( 7194):       329.06666666666666 150.4 53.333333333333314 430.4 Size(384.0, 682.7)
+I/flutter ( 7194):       headEulerAngleX: -2.392317533493042,
+I/flutter ( 7194):       headEulerAngleY: -38.50775146484375,
+I/flutter ( 7194):       headEulerAngleZ: -8.89970874786377, 
 */

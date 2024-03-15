@@ -1,4 +1,6 @@
+import 'package:camera/camera.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class DetectLeftFaceState extends Equatable {
   const DetectLeftFaceState();
@@ -41,4 +43,15 @@ class InDetectLeftFaceState extends DetectLeftFaceState {
 
   @override
   List<dynamic> get props => [status, message];
+}
+
+class InitializedLeftCameraState extends InDetectLeftFaceState {
+  InitializedLeftCameraState({
+    required this.controller,
+    required this.checkMatchedNotifier,
+  }) : super(
+            status: InDetectLeftFaceStatus.initial,
+            message: 'Initialized camera controller - left face');
+  final CameraController controller;
+  final ValueNotifier<bool> checkMatchedNotifier;
 }

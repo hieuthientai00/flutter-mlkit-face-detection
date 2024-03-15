@@ -8,8 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
+import '../detect_front_face/full_face_detector_checker.dart';
 import '../image_screen.dart';
-import 'full_face_detector_checker.dart';
+import 'full_face_detector_painter.dart';
 
 class CameraFrontFaceViewScreen extends StatefulWidget {
   CameraFrontFaceViewScreen({
@@ -26,6 +27,7 @@ class CameraFrontFaceViewScreen extends StatefulWidget {
 
 class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
   static List<CameraDescription> _cameras = [];
+  FullFaceDetectorPainter? facePainter;
   CameraController? _controller;
   int _cameraIndex = -1;
   bool checkMatched = false;
@@ -82,31 +84,38 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
           children: [
             CameraPreview(
               _controller!,
+              child: CustomPaint(
+                painter: facePainter,
+              ),
             ),
             Positioned(
               left: 50,
               top: 150,
               right: 50,
-              child: ValueListenableBuilder<bool>(
-                valueListenable: checkMatchedNotifier,
-                builder: (context, matched, child) {
-                  if (matched) {
-                    _controller?.pausePreview().then((_) {
-                      _controller?.takePicture().then((picture) {
-                        context.go(ImageView.route, extra: picture.path);
-                      });
-                    });
-                    return Image(
-                      color: Colors.green,
-                      image: AssetImage('assets/images/icon-scan2.png'),
-                    );
-                  }
-                  return Image(
-                    color: Colors.red,
-                    image: AssetImage('assets/images/icon-scan2.png'),
-                  );
-                },
+              child: Image(
+                color: checkMatched ? Colors.green : Colors.red,
+                image: AssetImage('assets/images/icon-scan2.png'),
               ),
+              // ValueListenableBuilder<bool>(
+              //   valueListenable: checkMatchedNotifier,
+              //   builder: (context, matched, child) {
+              //     if (matched) {
+              //       // _controller?.pausePreview().then((_) {
+              //       //   _controller?.takePicture().then((picture) {
+              //       //     context.go(ImageView.route, extra: picture.path);
+              //       //   });
+              //       // });
+              //       return Image(
+              //         color: Colors.green,
+              //         image: AssetImage('assets/images/icon-scan2.png'),
+              //       );
+              //     }
+              //     return Image(
+              //       color: Colors.red,
+              //       image: AssetImage('assets/images/icon-scan2.png'),
+              //     );
+              //   },
+              // ),
             ),
           ],
         ),
@@ -120,12 +129,25 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
         final face = faces[0];
         if (inputImage.metadata?.size != null &&
             inputImage.metadata?.rotation != null) {
-          FullFaceDetectorChecker.check(
+          // FullFaceDetectorChecker.check(
+          //   face: face,
+          //   canvasSize: Utils.frontFaceCanvasSize,
+          //   imageSize: inputImage.metadata!.size,
+          //   checkMatchedNotifier: checkMatchedNotifier,
+          // );
+          facePainter = FullFaceDetectorPainter(
             face: face,
-            canvasSize: Utils.frontFaceCanvasSize,
             imageSize: inputImage.metadata!.size,
-            checkMatchedNotifier: checkMatchedNotifier,
+            checkMatched: (matched) {
+              checkMatched = matched;
+            },
+            painter: painter,
           );
+        } else {
+          facePainter = null;
+        }
+        if (mounted) {
+          setState(() {});
         }
       }
     });
@@ -184,6 +206,7 @@ class _CameraFrontFaceViewScreenState extends State<CameraFrontFaceViewScreen> {
     if (format == null ||
         (Platform.isAndroid && format != InputImageFormat.nv21) ||
         (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;
+    print('Device Orientation ${_controller!.value.deviceOrientation} Rotation $rotation - RotationCompensation $rotationCompensation');
 
     // since format is constraint to nv21 or bgra8888, both only have one plane
     if (image.planes.length != 1) return null;

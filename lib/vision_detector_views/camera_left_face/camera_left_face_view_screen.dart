@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
+import '../image_screen.dart';
 import 'left_face_detector_painter.dart';
 
 class CameraLeftFaceViewScreen extends StatefulWidget {
@@ -56,9 +57,12 @@ class _CameraLeftFaceViewScreenState extends State<CameraLeftFaceViewScreen> {
 
   @override
   void dispose() {
-    _stopLiveFeed();
+    _controller?.stopImageStream();
+    _controller?.dispose();
+    _controller = null;
     widget.faceDetector.close();
     super.dispose();
+    print('DISPOSE $this');
   }
 
   @override
@@ -77,7 +81,9 @@ class _CameraLeftFaceViewScreenState extends State<CameraLeftFaceViewScreen> {
           children: [
             CameraPreview(
               _controller!,
-              child: CustomPaint(painter: facePainter),
+              child: CustomPaint(
+                painter: facePainter,
+              ),
             ),
             Positioned(
               left: 50,
@@ -87,26 +93,29 @@ class _CameraLeftFaceViewScreenState extends State<CameraLeftFaceViewScreen> {
                 color: checkMatched ? Colors.green : Colors.red,
                 image: AssetImage('assets/images/icon-scan2.png'),
               ),
+              // ValueListenableBuilder<bool>(
+              //   valueListenable: checkMatchedNotifier,
+              //   builder: (context, matched, child) {
+              //     if (matched) {
+              //       // _controller?.pausePreview().then((_) {
+              //       //   _controller?.takePicture().then((picture) {
+              //       //     context.go(ImageView.route, extra: picture.path);
+              //       //   });
+              //       // });
+              //       return Image(
+              //         color: Colors.green,
+              //         image: AssetImage('assets/images/icon-scan2.png'),
+              //       );
+              //     }
+              //     return Image(
+              //       color: Colors.red,
+              //       image: AssetImage('assets/images/icon-scan2.png'),
+              //     );
+              //   },
+              // ),
             ),
           ],
         ),
-        if (checkMatched)
-          Center(
-            child: IconButton(
-              icon: Icon(
-                Icons.camera,
-                size: 40,
-              ),
-              onPressed: () async {
-                if (_controller == null) {
-                  return;
-                }
-                _controller?.takePicture().then((pictureXfile) {
-                  context.go('/image-view', extra: pictureXfile.path);
-                });
-              },
-            ),
-          ),
       ],
     );
   }
@@ -136,20 +145,17 @@ class _CameraLeftFaceViewScreenState extends State<CameraLeftFaceViewScreen> {
 
   Future _startLiveFeed() async {
     final camera = _cameras[_cameraIndex];
-    _controller = CameraController(camera, ResolutionPreset.high,
+    _controller = CameraController(camera, ResolutionPreset.medium,
         enableAudio: false, imageFormatGroup: ImageFormatGroup.nv21);
     _controller?.initialize().then((_) {
       if (!mounted) {
         return;
       }
       _controller?.startImageStream(_processCameraImage);
+      setState(() {
+        print('Initialized camera controller');
+      });
     });
-  }
-
-  Future _stopLiveFeed() async {
-    await _controller?.stopImageStream();
-    await _controller?.dispose();
-    _controller = null;
   }
 
   void _processCameraImage(CameraImage image) {

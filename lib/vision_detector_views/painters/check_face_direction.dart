@@ -13,7 +13,7 @@ class CheckFaceDirection {
   bool checkFaceMatchingFrame(
       double left, double top, double right, double bottom) {
     return (left >= 310 &&
-        left <= 335 &&
+        left <= 340 &&
         top >= 140 &&
         top <= 170 &&
         right > 40 &&
@@ -21,15 +21,17 @@ class CheckFaceDirection {
         bottom >= 410 &&
         bottom <= 440);
   }
-
+  
   // check face nhìn sang bên trái - so với cam trước
   bool checkFaceLeft() {
-    return (headEulerAngleY <= -30 && headEulerAngleY >= -70);
+    return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera sau
+    // return (headEulerAngleY <= -20 && headEulerAngleY >= -80); // camera truoc
   }
 
   // check face nhìn sang bên phải - so với cam trước
   bool checkFaceRight() {
-    return (headEulerAngleY >= 30 && headEulerAngleY <= 70);
+    return (headEulerAngleY <= -20 && headEulerAngleY >= -80);
+    // return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera truoc
   }
 
   // check face giữa không sang trái phải - so với cam trước
@@ -67,10 +69,11 @@ class CheckFaceDirection {
 
   // step 2 : capture left face - so với cam trước
   bool faceLeft(double left, double top, double right, double bottom) {
-    return (checkFaceMatchingFrame(left, top, right, bottom) &&
+    final result = checkFaceMatchingFrame(left, top, right, bottom) &&
         checkFaceLeft() &&
         checkFaceNotUpDown() &&
-        checkFaceStraight());
+        checkFaceStraight();
+    return result;
   }
 
   // step 3 : capture right face - so với cam trước

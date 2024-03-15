@@ -51,7 +51,7 @@ class InitializedFrontCameraState extends InDetectFrontFaceState {
     required this.checkMatchedNotifier,
   }) : super(
             status: InDetectFrontFaceStatus.initial,
-            message: 'Initialized camera controller');
+            message: 'Initialized camera controller - full face');
   final CameraController controller;
   final ValueNotifier<bool> checkMatchedNotifier;
 }

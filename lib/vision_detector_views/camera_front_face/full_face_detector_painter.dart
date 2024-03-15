@@ -45,7 +45,8 @@ class FullFaceDetectorPainter extends CustomPainter {
     );
     print(
       '''
-      $left $top $right $bottom $size
+      raw ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
+      front $left $top $right $bottom $size $imageSize
       headEulerAngleX: ${face.headEulerAngleX},
       headEulerAngleY: ${face.headEulerAngleY},
       headEulerAngleZ: ${face.headEulerAngleZ},

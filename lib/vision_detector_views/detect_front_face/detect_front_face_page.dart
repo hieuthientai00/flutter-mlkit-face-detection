@@ -11,19 +11,20 @@ class DetectFrontFacePage extends StatelessWidget {
     Key? key,
     required this.faceDetector,
   }) : super(key: key);
+
   final FaceDetector faceDetector;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocProvider(
-      create: (BuildContext context) => DetectFrontFaceBloc(
-        const UnDetectFrontFaceState(),
-        faceDetector: faceDetector,
-      )..add(InitializedFrontCamera()),
-      child: DetectFrontFaceScreen(
-        faceDetector: faceDetector,
-      ),
-    ));
+        body: SafeArea(
+          child: BlocProvider(
+              create: (BuildContext context) => DetectFrontFaceBloc(
+          const UnDetectFrontFaceState(),
+          faceDetector: faceDetector,
+              )..add(InitializeFrontFaceCameraEvent()),
+              child: DetectFrontFaceScreen(),
+            ),
+        ));
   }
 }

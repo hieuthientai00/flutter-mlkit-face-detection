@@ -40,11 +40,15 @@ final router = GoRouter(
     ),
     GoRoute(
       path: DetectLeftFacePage.routeName,
-      builder: (context, state) => DetectLeftFacePage(),
+      builder: (context, state) => DetectLeftFacePage(
+        faceDetector: state.extra as FaceDetector,
+      ),
     ),
     GoRoute(
       path: DetectRightFacePage.routeName,
-      builder: (context, state) => DetectRightFacePage(),
+      builder: (context, state) => DetectRightFacePage(
+        faceDetector: state.extra as FaceDetector,
+      ),
     ),
     GoRoute(
       path: ImageView.route,

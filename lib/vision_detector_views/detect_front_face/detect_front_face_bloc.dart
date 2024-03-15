@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
-import '../camera_front_face/full_face_detector_checker.dart';
 import 'index.dart';
 
 class DetectFrontFaceBloc
@@ -74,7 +73,6 @@ class DetectFrontFaceBloc
     // since format is constraint to nv21 or bgra8888, both only have one plane
     if (image.planes.length != 1) return null;
     final plane = image.planes.first;
-
     // compose InputImage using bytes
     return InputImage.fromBytes(
       bytes: plane.bytes,

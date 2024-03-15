@@ -70,7 +70,7 @@ class _CameraRightFaceViewScreenState extends State<CameraRightFaceViewScreen> {
     return Column(
       children: [
         Text(
-          'LEFT FACE',
+          'RIGHT FACE',
           style: TextStyle(fontSize: 30, color: Colors.red),
         ),
         Stack(
@@ -91,23 +91,6 @@ class _CameraRightFaceViewScreenState extends State<CameraRightFaceViewScreen> {
             ),
           ],
         ),
-        if (checkMatched)
-          Center(
-            child: IconButton(
-              icon: Icon(
-                Icons.camera,
-                size: 40,
-              ),
-              onPressed: () async {
-                if (_controller == null) {
-                  return;
-                }
-                _controller?.takePicture().then((pictureXfile) {
-                  context.go(ImageView.route, extra: pictureXfile.path);
-                });
-              },
-            ),
-          ),
       ],
     );
   }
@@ -144,6 +127,9 @@ class _CameraRightFaceViewScreenState extends State<CameraRightFaceViewScreen> {
         return;
       }
       _controller?.startImageStream(_processCameraImage);
+      setState(() {
+        print('Initialized camera controller');
+      });
     });
   }
 

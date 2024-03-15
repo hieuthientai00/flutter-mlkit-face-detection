@@ -10,7 +10,7 @@ abstract class DetectFrontFaceEvent {
       {DetectFrontFaceState currentState, DetectFrontFaceBloc bloc});
 }
 
-class InitializedFrontCamera extends DetectFrontFaceEvent {
+class InitializeFrontFaceCameraEvent extends DetectFrontFaceEvent {
   @override
   Stream<DetectFrontFaceState> applyAsync(
       {DetectFrontFaceState? currentState, DetectFrontFaceBloc? bloc}) async* {

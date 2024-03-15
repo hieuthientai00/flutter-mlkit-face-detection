@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import 'index.dart';
 
 class DetectRightFacePage extends StatelessWidget {
   static const String routeName = '/detectRightFace';
 
-  const DetectRightFacePage({Key? key}) : super(key: key);
+  const DetectRightFacePage({
+    Key? key,
+    required this.faceDetector,
+  }) : super(key: key);
+
+  final FaceDetector faceDetector;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('DetectRightFace'),
-        ),
-        body: BlocProvider(
-          create: (BuildContext context) =>
-              DetectRightFaceBloc(const UnDetectRightFaceState())
-                ..add(LoadDetectRightFaceEvent()),
-          child: const DetectRightFaceScreen(),
-        ));
+        body: SafeArea(
+      child: BlocProvider(
+        create: (BuildContext context) => DetectRightFaceBloc(
+          const UnDetectRightFaceState(),
+          faceDetector: faceDetector,
+        )..add(InitializeCameraEvent()),
+        child: const DetectRightFaceScreen(),
+      ),
+    ));
   }
 }

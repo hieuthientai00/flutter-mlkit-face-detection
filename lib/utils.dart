@@ -20,4 +20,6 @@ class Utils {
   static final Size rightFaceCanvasSize = Size(384.0, 576.0);
   static final Size downFaceCanvasSize = Size(384.0, 576.0);
   static final Size upFaceCanvasSize = Size(384.0, 576.0);
+  static final baseUrl = 'http://10.0.2.2:3000';
+  static final imageUrl = '/image';
 }

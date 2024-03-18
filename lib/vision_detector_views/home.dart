@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:image_picker/image_picker.dart';
 
+import '../remote/post_image.dart';
 import 'camera_down_face/camera_down_face_view.dart';
 import 'camera_front_face/camera_front_face_view.dart';
 import 'camera_left_face/camera_left_face_view.dart';
@@ -141,11 +145,34 @@ class HomePage extends StatelessWidget {
                   },
                   child: Text('Bloc up face'),
                 ),
+                TextButton(
+                  onPressed: () async {
+                    openGallery(context);
+                  },
+                  child: Text('Upload image'),
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> openGallery(BuildContext context) async {
+    ImagePicker().pickImage(source: ImageSource.gallery).then((xFile) {
+      print('Picked file');
+      if (xFile != null) {
+        print('A file has been picked');
+        ApiService.postImage(File(xFile.path)).then((isSuccessfully) {
+          print('Sended file');
+          if (isSuccessfully) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Upload successfully')),
+            );
+          }
+        });
+      }
+    });
   }
 }

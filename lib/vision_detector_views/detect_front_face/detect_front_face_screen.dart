@@ -13,6 +13,7 @@ class DetectFrontFaceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int captured = 0;
     return BlocConsumer<DetectFrontFaceBloc, DetectFrontFaceState>(
         bloc: context.read<DetectFrontFaceBloc>(),
         listener: (_, DetectFrontFaceState currentState) {},
@@ -37,7 +38,8 @@ class DetectFrontFaceScreen extends StatelessWidget {
                       child: ValueListenableBuilder<bool>(
                         valueListenable: currentState.checkMatchedNotifier,
                         builder: (context, matched, child) {
-                          if (matched) {
+                          if (matched && captured == 0) {
+                            captured = 1;
                             currentState.controller.pausePreview().then((_) {
                               currentState.controller
                                   .takePicture()

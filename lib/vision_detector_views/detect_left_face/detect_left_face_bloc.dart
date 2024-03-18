@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
-import '../detect_front_face/full_face_detector_checker.dart';
 import 'index.dart';
 
 class DetectLeftFaceBloc

@@ -3,11 +3,9 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
-import '../image_screen.dart';
 import 'left_face_detector_painter.dart';
 
 class CameraLeftFaceViewScreen extends StatefulWidget {

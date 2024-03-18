@@ -4,7 +4,7 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../painters/check_face_direction.dart';
 import '../painters/coordinates_translator.dart';
 
-class RightFaceDetectorChecker {
+class DownFaceDetectorChecker {
   static void check({
     required Face face,
     required Size canvasSize,
@@ -32,8 +32,8 @@ class RightFaceDetectorChecker {
       imageSize,
     );
     print('''
-      raw ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
-      RIGHT $left $top $right $bottom $canvasSize $imageSize
+      raw-DOWN ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
+      DOWN $left $top $right $bottom $canvasSize $imageSize
       headEulerAngleX: ${face.headEulerAngleX},
       headEulerAngleY: ${face.headEulerAngleY},
       headEulerAngleZ: ${face.headEulerAngleZ},
@@ -42,7 +42,7 @@ class RightFaceDetectorChecker {
       headEulerAngleX: face.headEulerAngleX!,
       headEulerAngleY: face.headEulerAngleY!,
       headEulerAngleZ: face.headEulerAngleZ!,
-    ).faceRight(face.boundingBox.left, face.boundingBox.top,
+    ).downFace(face.boundingBox.left, face.boundingBox.top,
         face.boundingBox.right, face.boundingBox.bottom);
   }
 }

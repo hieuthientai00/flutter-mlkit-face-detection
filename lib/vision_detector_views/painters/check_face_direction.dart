@@ -9,29 +9,50 @@ class CheckFaceDirection {
   final double headEulerAngleY;
   final double headEulerAngleZ;
 
-  // check face khớp với khung
-  bool checkFaceMatchingFrame(
-      double left, double top, double right, double bottom) {
-    return (left >= 50 &&
-        left <= 90 &&
-        top >= 170 &&
-        top <= 210 &&
-        right > 390 &&
-        right <= 430 &&
-        bottom >= 510 &&
-        bottom <= 550);
+  // // check face khớp với khung
+  // bool checkFaceMatchingFrame(
+  //     double left, double top, double right, double bottom) {
+  //   return (left >= 50 &&
+  //       left <= 80 &&
+  //       top >= 170 &&
+  //       top <= 200 &&
+  //       right >= 390 &&
+  //       right <= 420 &&
+  //       bottom >= 520 &&
+  //       bottom <= 550);
+  // }
+
+  // // check face khớp với khung - camera trước chụp mặt phải
+  // bool checkFaceMatchingFrameRight(
+  //     double left, double top, double right, double bottom) {
+  //   return (left >= 70 &&
+  //       left <= 120 &&
+  //       top >= 260 &&
+  //       top <= 310 &&
+  //       right >= 590 &&
+  //       right <= 640 &&
+  //       bottom >= 780 &&
+  //       bottom <= 830);
+  // }
+
+  // check matched frame
+  bool checkMatchedFrame(double left, double top, double right, double bottom) {
+    return ((left >= 60 && left <= 100) &&
+        ((top >= 150 && top <= 210) || (top >= 260 && top <= 310)) &&
+        ((right >= 350 && right <= 430) || (right >= 580 && right <= 640)) &&
+        ((bottom >= 430 && bottom <= 560) || (bottom >= 790 && bottom <= 830)));
   }
 
   // check face chụp mặt bên trái - so với cam trước
   bool checkFaceLeft() {
-    return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera sau
-    // return (headEulerAngleY <= -20 && headEulerAngleY >= -80); // camera truoc
+    // return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera sau
+    return (headEulerAngleY <= -20 && headEulerAngleY >= -80); // camera truoc
   }
 
   // check face nhìn sang bên phải - so với cam trước
   bool checkFaceRight() {
-    return (headEulerAngleY <= -20 && headEulerAngleY >= -80);
-    // return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera truoc
+    // return (headEulerAngleY <= -20 && headEulerAngleY >= -80);
+    return (headEulerAngleY >= 20 && headEulerAngleY <= 80); // camera truoc
   }
 
   // check face giữa không sang trái phải - so với cam trước
@@ -41,12 +62,14 @@ class CheckFaceDirection {
 
   // check face nhìn lên - so với cam trước
   bool checkFaceUp() {
-    return (headEulerAngleX <= -30 && headEulerAngleX >= -70);
+    return (headEulerAngleX >= 20 && headEulerAngleX <= 70);
+    // return (headEulerAngleX <= -30 && headEulerAngleX >= -70);
   }
 
   // check face nhìn xuống - so với cam trước
   bool checkFaceDown() {
-    return (headEulerAngleX >= 30 && headEulerAngleX <= 70);
+    // return (headEulerAngleX >= 30 && headEulerAngleX <= 70);
+    return (headEulerAngleX <= -20 && headEulerAngleX >= -70);
   }
 
   // check face giữa không lên không xuống - so với cam trước
@@ -61,7 +84,11 @@ class CheckFaceDirection {
 
   // step 1 : capture full face - so với cam trước
   bool fullFace(double left, double top, double right, double bottom) {
-    return (checkFaceMatchingFrame(left, top, right, bottom) &&
+    // return (checkFaceMatchingFrame(left, top, right, bottom) &&
+    //     checkFaceNotUpDown() &&
+    //     checkFaceNotLeftRight() &&
+    //     checkFaceStraight());
+    return (checkMatchedFrame(left, top, right, bottom) &&
         checkFaceNotUpDown() &&
         checkFaceNotLeftRight() &&
         checkFaceStraight());
@@ -69,7 +96,11 @@ class CheckFaceDirection {
 
   // step 2 : capture left face - so với cam trước
   bool faceLeft(double left, double top, double right, double bottom) {
-    final result = checkFaceMatchingFrame(left, top, right, bottom) &&
+    // final result = checkFaceMatchingFrame(left, top, right, bottom) &&
+    //     checkFaceLeft() &&
+    //     checkFaceNotUpDown() &&
+    //     checkFaceStraight();
+    final result = checkMatchedFrame(left, top, right, bottom) &&
         checkFaceLeft() &&
         checkFaceNotUpDown() &&
         checkFaceStraight();
@@ -78,9 +109,27 @@ class CheckFaceDirection {
 
   // step 3 : capture right face - so với cam trước
   bool faceRight(double left, double top, double right, double bottom) {
-    return (checkFaceMatchingFrame(left, top, right, bottom) &&
+    // return (checkFaceMatchingFrame(left, top, right, bottom) &&
+    //     checkFaceRight() &&
+    //     checkFaceNotUpDown() &&
+    //     checkFaceStraight());
+    return (checkMatchedFrame(left, top, right, bottom) &&
         checkFaceRight() &&
         checkFaceNotUpDown() &&
         checkFaceStraight());
+  }
+
+  // step 4 : capture down face - so với cam trước
+  bool downFace(double left, double top, double right, double bottom) {
+    return (checkMatchedFrame(left, top, right, bottom) &&
+        checkFaceStraight() &&
+        checkFaceDown());
+  }
+
+  // step 5 : capture up face - so với cam trước
+  bool upFace(double left, double top, double right, double bottom) {
+    return (checkMatchedFrame(left, top, right, bottom) &&
+        checkFaceStraight() &&
+        checkFaceUp());
   }
 }

@@ -11,8 +11,13 @@ class Utils {
       CameraLensDirection.back;
   static final CameraLensDirection defaultCameraLensDirection =
       CameraLensDirection.front;
+  static final double widthMin = 720.0;
+  static final double widthMax = 1280.0;
   static final Size frontFaceCanvasSize = Size(384.0, 576.0);
-  // static final Size defaultFaceCanvasSize = Size(384.0, 576.0);
+  static final Size defaultMinFaceCanvasSize = Size(384.0, 576.0);
+  static final Size defaultMaxFaceCanvasSize = Size(384.0, 682.7);
   static final Size leftFaceCanvasSize = Size(384.0, 682.7);
   static final Size rightFaceCanvasSize = Size(384.0, 576.0);
+  static final Size downFaceCanvasSize = Size(384.0, 576.0);
+  static final Size upFaceCanvasSize = Size(384.0, 576.0);
 }

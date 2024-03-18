@@ -4,46 +4,64 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import '../painters/check_face_direction.dart';
 import '../painters/coordinates_translator.dart';
 
-class FullFaceDetectorChecker {
-  static void check({
-    required Face face,
-    required Size canvasSize,
-    required Size imageSize,
-    required ValueNotifier<bool> checkMatchedNotifier,
-  }) {
+class UpFaceDetectorPainter extends CustomPainter {
+  UpFaceDetectorPainter({
+    required this.face,
+    required this.imageSize,
+    required this.checkMatched,
+    required this.painter,
+  });
+
+  final Paint painter;
+  final Face face;
+  final Size imageSize;
+  final void Function(bool) checkMatched;
+
+  @override
+  void paint(Canvas canvas, Size size) {
     final left = ConvertCoordinateImage.convertX(
       face.boundingBox.left,
-      canvasSize,
+      size,
       imageSize,
     );
     final top = ConvertCoordinateImage.convertY(
       face.boundingBox.top,
-      canvasSize,
+      size,
       imageSize,
     );
     final right = ConvertCoordinateImage.convertX(
       face.boundingBox.right,
-      canvasSize,
+      size,
       imageSize,
     );
     final bottom = ConvertCoordinateImage.convertY(
       face.boundingBox.bottom,
-      canvasSize,
+      size,
       imageSize,
     );
+    canvas.drawRect(
+      Rect.fromLTRB(left, top, right, bottom),
+      painter,
+    );
     print('''
-      RAW ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
-      FRONT $left $top $right $bottom $canvasSize $imageSize
+      raw-up ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
+      up-degree $left $top $right $bottom $size $imageSize
       headEulerAngleX: ${face.headEulerAngleX},
       headEulerAngleY: ${face.headEulerAngleY},
       headEulerAngleZ: ${face.headEulerAngleZ},
       ''');
-    checkMatchedNotifier.value = CheckFaceDirection(
+    checkMatched(CheckFaceDirection(
       headEulerAngleX: face.headEulerAngleX!,
       headEulerAngleY: face.headEulerAngleY!,
       headEulerAngleZ: face.headEulerAngleZ!,
-    ).fullFace(face.boundingBox.left, face.boundingBox.top,
-        face.boundingBox.right, face.boundingBox.bottom);
+    ).upFace(face.boundingBox.left, face.boundingBox.top,
+        face.boundingBox.right, face.boundingBox.bottom));
+  }
+
+  @override
+  bool shouldRepaint(UpFaceDetectorPainter oldDelegate) {
+    // return false;
+    return oldDelegate.imageSize != imageSize || oldDelegate.face != face;
   }
 }
 

@@ -7,23 +7,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
-import '../detect_front_face/full_face_detector_checker.dart';
 import 'index.dart';
 
-class DetectLeftFaceBloc
-    extends Bloc<DetectLeftFaceEvent, DetectLeftFaceState> {
-  DetectLeftFaceBloc(
-    DetectLeftFaceState initialState, {
+class DetectDownFaceBloc
+    extends Bloc<DetectDownFaceEvent, DetectDownFaceState> {
+  DetectDownFaceBloc(
+    DetectDownFaceState initialState, {
     required this.faceDetector,
   }) : super(initialState) {
-    on<DetectLeftFaceEvent>((event, emit) {
-      return emit.forEach<DetectLeftFaceState>(
+    on<DetectDownFaceEvent>((event, emit) {
+      return emit.forEach<DetectDownFaceState>(
         event.applyAsync(currentState: state, bloc: this),
         onData: (state) => state,
         onError: (error, stackTrace) {
           logger.e('$runtimeType', error: error, stackTrace: stackTrace);
-          return InDetectLeftFaceState(
-              status: InDetectLeftFaceStatus.error, message: error.toString());
+          return InDetectDownFaceState(
+              status: InDetectDownFaceStatus.error, message: error.toString());
         },
       );
     });
@@ -100,7 +99,7 @@ class DetectLeftFaceBloc
         final face = faces[0];
         if (inputImage.metadata?.size != null &&
             inputImage.metadata?.rotation != null) {
-          LeftFaceDetectorChecker.check(
+          DownFaceDetectorChecker.check(
             face: face,
             canvasSize: (inputImage.metadata!.size.height == Utils.widthMin)
                 ? Utils.defaultMinFaceCanvasSize

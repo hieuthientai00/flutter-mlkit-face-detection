@@ -44,6 +44,7 @@ class RightFaceDetectorPainter extends CustomPainter {
       painter,
     );
     print('''
+      raw ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
       right $left $top $right $bottom $size $imageSize
       headEulerAngleX: ${face.headEulerAngleX},
       headEulerAngleY: ${face.headEulerAngleY},

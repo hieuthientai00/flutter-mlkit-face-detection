@@ -94,7 +94,9 @@ class DetectFrontFaceBloc
             inputImage.metadata?.rotation != null) {
           FullFaceDetectorChecker.check(
             face: face,
-            canvasSize: Utils.frontFaceCanvasSize,
+            canvasSize: (inputImage.metadata!.size.height == Utils.widthMin)
+                ? Utils.defaultMinFaceCanvasSize
+                : Utils.defaultMaxFaceCanvasSize,
             imageSize: inputImage.metadata!.size,
             checkMatchedNotifier: checkMatchedNotifier,
           );

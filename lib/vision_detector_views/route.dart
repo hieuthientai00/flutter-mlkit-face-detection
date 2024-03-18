@@ -1,12 +1,16 @@
 import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
+import 'camera_down_face/camera_down_face_view.dart';
 import 'camera_front_face/camera_front_face_view.dart';
 import 'camera_left_face/camera_left_face_view.dart';
 import 'camera_right_face/camera_right_face_view.dart';
+import 'camera_up_face/camera_up_face_view.dart';
+import 'detect_down_face/index.dart';
 import 'detect_front_face/index.dart';
 import 'detect_left_face/index.dart';
 import 'detect_right_face/index.dart';
+import 'detect_up_face/index.dart';
 import 'home.dart';
 import 'image_screen.dart';
 
@@ -33,6 +37,16 @@ final router = GoRouter(
           CameraLeftFaceView(faceDetector: state.extra as FaceDetector),
     ),
     GoRoute(
+      path: CameraDownFaceView.route,
+      builder: (context, state) =>
+          CameraDownFaceView(faceDetector: state.extra as FaceDetector),
+    ),
+    GoRoute(
+      path: CameraUpFaceView.route,
+      builder: (context, state) =>
+          CameraUpFaceView(faceDetector: state.extra as FaceDetector),
+    ),
+    GoRoute(
       path: DetectFrontFacePage.routeName,
       builder: (context, state) => DetectFrontFacePage(
         faceDetector: state.extra as FaceDetector,
@@ -47,6 +61,18 @@ final router = GoRouter(
     GoRoute(
       path: DetectRightFacePage.routeName,
       builder: (context, state) => DetectRightFacePage(
+        faceDetector: state.extra as FaceDetector,
+      ),
+    ),
+    GoRoute(
+      path: DetectDownFacePage.routeName,
+      builder: (context, state) => DetectDownFacePage(
+        faceDetector: state.extra as FaceDetector,
+      ),
+    ),
+    GoRoute(
+      path: DetectUpFacePage.routeName,
+      builder: (context, state) => DetectUpFacePage(
         faceDetector: state.extra as FaceDetector,
       ),
     ),

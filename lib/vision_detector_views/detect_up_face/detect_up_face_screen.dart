@@ -6,22 +6,20 @@ import 'package:go_router/go_router.dart';
 import '../image_screen.dart';
 import 'index.dart';
 
-class DetectLeftFaceScreen extends StatelessWidget {
-  const DetectLeftFaceScreen({
-    Key? key,
-  }) : super(key: key);
+class DetectUpFaceScreen extends StatelessWidget {
+  const DetectUpFaceScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<DetectLeftFaceBloc, DetectLeftFaceState>(
-        bloc: context.read<DetectLeftFaceBloc>(),
-        listener: (_, DetectLeftFaceState currentState) {},
-        builder: (_, DetectLeftFaceState currentState) {
-          if (currentState is InitializedLeftCameraState) {
+    return BlocConsumer<DetectUpFaceBloc, DetectUpFaceState>(
+        bloc: context.read<DetectUpFaceBloc>(),
+        listener: (_, DetectUpFaceState currentState) {},
+        builder: (_, DetectUpFaceState currentState) {
+          if (currentState is InitializedUpCameraState) {
             return Column(
               children: [
                 Text(
-                  'LEFT FACE',
+                  'UP FACE',
                   style: TextStyle(fontSize: 30, color: Colors.red),
                 ),
                 Stack(

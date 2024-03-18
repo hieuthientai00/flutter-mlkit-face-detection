@@ -7,23 +7,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 import '../../utils.dart';
-import '../detect_front_face/full_face_detector_checker.dart';
 import 'index.dart';
 
-class DetectLeftFaceBloc
-    extends Bloc<DetectLeftFaceEvent, DetectLeftFaceState> {
-  DetectLeftFaceBloc(
-    DetectLeftFaceState initialState, {
+class DetectUpFaceBloc extends Bloc<DetectUpFaceEvent, DetectUpFaceState> {
+  DetectUpFaceBloc(
+    DetectUpFaceState initialState, {
     required this.faceDetector,
   }) : super(initialState) {
-    on<DetectLeftFaceEvent>((event, emit) {
-      return emit.forEach<DetectLeftFaceState>(
+    on<DetectUpFaceEvent>((event, emit) {
+      return emit.forEach<DetectUpFaceState>(
         event.applyAsync(currentState: state, bloc: this),
         onData: (state) => state,
         onError: (error, stackTrace) {
           logger.e('$runtimeType', error: error, stackTrace: stackTrace);
-          return InDetectLeftFaceState(
-              status: InDetectLeftFaceStatus.error, message: error.toString());
+          return InDetectUpFaceState(
+              status: InDetectUpFaceStatus.error, message: error.toString());
         },
       );
     });
@@ -81,6 +79,8 @@ class DetectLeftFaceBloc
     if (image.planes.length != 1) return null;
     final plane = image.planes.first;
 
+    print('SIZE CAMERA IMAGE: ${image.width} - ${image.height}');
+
     // compose InputImage using bytes
     return InputImage.fromBytes(
       bytes: plane.bytes,
@@ -100,7 +100,7 @@ class DetectLeftFaceBloc
         final face = faces[0];
         if (inputImage.metadata?.size != null &&
             inputImage.metadata?.rotation != null) {
-          LeftFaceDetectorChecker.check(
+          UpFaceDetectorChecker.check(
             face: face,
             canvasSize: (inputImage.metadata!.size.height == Utils.widthMin)
                 ? Utils.defaultMinFaceCanvasSize

@@ -101,7 +101,9 @@ class DetectRightFaceBloc
             inputImage.metadata?.rotation != null) {
           RightFaceDetectorChecker.check(
             face: face,
-            canvasSize: Utils.rightFaceCanvasSize,
+            canvasSize: (inputImage.metadata!.size.height == Utils.widthMin)
+                ? Utils.defaultMinFaceCanvasSize
+                : Utils.defaultMaxFaceCanvasSize,
             imageSize: inputImage.metadata!.size,
             checkMatchedNotifier: checkMatchedNotifier,
           );

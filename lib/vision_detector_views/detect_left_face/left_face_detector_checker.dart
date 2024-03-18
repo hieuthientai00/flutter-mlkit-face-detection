@@ -31,19 +31,19 @@ class LeftFaceDetectorChecker {
       canvasSize,
       imageSize,
     );
-    print(
-      '''
+    print('''
+      raw-LEFT ${face.boundingBox.left} ${face.boundingBox.top} ${face.boundingBox.right} ${face.boundingBox.bottom}
       LEFT $left $top $right $bottom $canvasSize $imageSize
       headEulerAngleX: ${face.headEulerAngleX},
       headEulerAngleY: ${face.headEulerAngleY},
       headEulerAngleZ: ${face.headEulerAngleZ},
-      '''
-    );
+      ''');
     checkMatchedNotifier.value = CheckFaceDirection(
       headEulerAngleX: face.headEulerAngleX!,
       headEulerAngleY: face.headEulerAngleY!,
       headEulerAngleZ: face.headEulerAngleZ!,
-    ).faceLeft(left, top, right, bottom);
+    ).faceLeft(face.boundingBox.left, face.boundingBox.top,
+        face.boundingBox.right, face.boundingBox.bottom);
   }
 }
 /*

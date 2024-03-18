@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
+import 'camera_down_face/camera_down_face_view.dart';
 import 'camera_front_face/camera_front_face_view.dart';
 import 'camera_left_face/camera_left_face_view.dart';
 import 'camera_right_face/camera_right_face_view.dart';
+import 'camera_up_face/camera_up_face_view.dart';
+import 'detect_down_face/index.dart';
 import 'detect_front_face/index.dart';
 import 'detect_left_face/index.dart';
 import 'detect_right_face/index.dart';
+import 'detect_up_face/index.dart';
 
 class HomePage extends StatelessWidget {
   static final String route = '/home-page';
@@ -27,7 +31,9 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.push(CameraFrontFaceView.route,
                         extra: FaceDetector(
-                          options: FaceDetectorOptions(),
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
                         ));
                   },
                   child: Text('SetState front face'),
@@ -36,7 +42,9 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.push(CameraLeftFaceView.route,
                         extra: FaceDetector(
-                          options: FaceDetectorOptions(),
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
                         ));
                   },
                   child: Text('SetState left face'),
@@ -45,10 +53,34 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.push(CameraRightFaceView.route,
                         extra: FaceDetector(
-                          options: FaceDetectorOptions(),
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
                         ));
                   },
                   child: Text('SetState right face'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.push(CameraDownFaceView.route,
+                        extra: FaceDetector(
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
+                        ));
+                  },
+                  child: Text('SetState down face'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.push(CameraUpFaceView.route,
+                        extra: FaceDetector(
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
+                        ));
+                  },
+                  child: Text('SetState up face'),
                 ),
               ],
             ),
@@ -58,7 +90,9 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.push(DetectFrontFacePage.routeName,
                         extra: FaceDetector(
-                          options: FaceDetectorOptions(),
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
                         ));
                   },
                   child: Text('Bloc front face'),
@@ -67,7 +101,9 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.push(DetectLeftFacePage.routeName,
                         extra: FaceDetector(
-                          options: FaceDetectorOptions(),
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
                         ));
                   },
                   child: Text('Bloc left face'),
@@ -76,10 +112,34 @@ class HomePage extends StatelessWidget {
                   onPressed: () {
                     context.push(DetectRightFacePage.routeName,
                         extra: FaceDetector(
-                          options: FaceDetectorOptions(),
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
                         ));
                   },
                   child: Text('Bloc right face'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.push(DetectDownFacePage.routeName,
+                        extra: FaceDetector(
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
+                        ));
+                  },
+                  child: Text('Bloc down face'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.push(DetectUpFacePage.routeName,
+                        extra: FaceDetector(
+                          options: FaceDetectorOptions(
+                            minFaceSize: 1,
+                          ),
+                        ));
+                  },
+                  child: Text('Bloc up face'),
                 ),
               ],
             ),
